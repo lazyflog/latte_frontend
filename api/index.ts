@@ -1,9 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Auth from './Auth';
+import Store from './Store';
 
 const API = {
   Auth,
+  Store,
 
   async hasToken(): Promise<boolean> {
     try {

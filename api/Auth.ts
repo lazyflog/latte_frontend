@@ -13,7 +13,7 @@ export interface TokenResponse {
 
 export default {
   token(args: TokenArgs): Promise<AxiosResponse<TokenResponse>> {
-    const endpoint = '/auth/login';
+    const endpoint = '/auth/token';
     return client.post<TokenResponse>(endpoint, args);
   },
 };
