@@ -21,11 +21,17 @@ interface Store {
     operation_time: OperationTime;
     location_geo: string;
     tag: Array<string>;
+    results: Array<String>;
 }
 
 export default {
     getStore(id: number): Promise<AxiosResponse<Store>> {
-        const endpoint = `/stores/${id}/`;
-        return client.get<Store>(endpoint);
+        if (id != 0) {
+            const endpoint = `/stores/${id}/`;
+            return client.get<Store>(endpoint);
+        } else {
+            const endpoint = `/stores/`;
+            return client.get<Store>(endpoint);
+        }
     }
 }
