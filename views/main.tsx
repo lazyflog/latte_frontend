@@ -10,6 +10,17 @@ import API from '../api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {TokenResponse} from '../api/Auth';
 import {LightTheme} from '../styles';
+import Header from '../components/main/Header';
+import Body from '../components/main/Body';
+
+import {Store} from '../api/Store';
+import {Pagination} from '../api/General';
+import {AxiosResponse} from 'axios';
+import styled from 'styled-components/native';
+
+const Container = styled.View`
+  flex: 1;
+`;
 
 const Main: React.FC = () => {
   const saveToken = ({access, refresh}: TokenResponse) => {
@@ -17,7 +28,7 @@ const Main: React.FC = () => {
     AsyncStorage.setItem('LATTE_REFRESH_TOKEN', refresh);
   };
 
-  const [cafeData, setCafeData] = useState([]);
+  const [cafeData, setCafeData] = useState<Array<Store>>([]);
 
   const authorization = async () => {
     const token = await AsyncStorage.getItem('LATTE_ACCESS_TOKEN');
@@ -34,7 +45,10 @@ const Main: React.FC = () => {
   };
 
   const get1Store = async () => {
-    const response = await API.Store.getStore(0);
+    const response: AxiosResponse<Pagination<Store>> = await API.Store.getStore(
+      0,
+    );
+
     setCafeData(response.data.results);
   };
 
@@ -44,64 +58,10 @@ const Main: React.FC = () => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <FlatList
-        data={cafeData}
-        keyExtractor={item => item.id}
-        ListHeaderComponent={
-          <View
-            style={{
-              flexDirection: 'row',
-              paddingBottom: 20,
-              paddingLeft: 20,
-              backgroundColor: LightTheme.colors.background,
-            }}>
-            <Text style={{fontWeight: '600', fontSize: 18, color: '#393939'}}>
-              LATTE
-            </Text>
-          </View>
-        }
-        stickyHeaderIndices={[0]}
-        renderItem={({item}) => {
-          return (
-            <View style={{flex: 1, marginTop: 5}}>
-              <TouchableOpacity
-                style={{
-                  padding: 20,
-                  backgroundColor: LightTheme.colors.nav_background,
-                }}>
-                <Text
-                  style={{fontWeight: '500', fontSize: 15, color: '#393939'}}>
-                  가게명: {item.name}
-                </Text>
-                {item.tag.length > 0 ? (
-                  <View style={{flexDirection: 'row', marginTop: 10}}>
-                    {item?.tag.map((value, index): any => {
-                      return (
-                        <View
-                          style={{
-                            padding: 10,
-                            backgroundColor: '#393939',
-                            marginRight: 10,
-                          }}
-                          key={index}>
-                          <Text
-                            style={{
-                              fontWeight: '500',
-                              fontSize: 13,
-                              color: '#FFF',
-                            }}>
-                            {value}
-                          </Text>
-                        </View>
-                      );
-                    })}
-                  </View>
-                ) : null}
-              </TouchableOpacity>
-            </View>
-          );
-        }}
-      />
+      <Header />
+      <Container>
+        <Body stores={cafeData} />
+      </Container>
     </SafeAreaView>
   );
 };
