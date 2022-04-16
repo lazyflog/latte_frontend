@@ -17,12 +17,21 @@ import {Store} from '../api/Store';
 import {Pagination} from '../api/General';
 import {AxiosResponse} from 'axios';
 import styled from 'styled-components/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 const Container = styled.View`
   flex: 1;
 `;
 
-const Main: React.FC = () => {
+type RootStackParamList = {
+  Main: undefined;
+  Search: undefined;
+};
+
+type MainScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
+type Props = {navigation: MainScreenNavigationProp};
+
+const Main: React.FC<Props> = ({navigation}) => {
   const saveToken = ({access, refresh}: TokenResponse) => {
     AsyncStorage.setItem('LATTE_ACCESS_TOKEN', access);
     AsyncStorage.setItem('LATTE_REFRESH_TOKEN', refresh);
@@ -58,7 +67,7 @@ const Main: React.FC = () => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Header />
+      <Header navigation={navigation} />
       <Container>
         <Body stores={cafeData} />
       </Container>

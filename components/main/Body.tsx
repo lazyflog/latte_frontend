@@ -3,6 +3,8 @@ import React from 'react';
 import {Text, View, Dimensions, Platform, StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 import {Store} from '../../api/Store';
+import {MainText, MainImageText} from '../../assets/styles/TextStyles';
+import MapView from 'react-native-maps';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -10,20 +12,11 @@ const RenderView = styled.View`
   width: ${screenWidth - 60}px;
   height: 250px;
 `;
-
-const RenderText = styled.Text`
-  font-weight: 700;
-  color: #fff;
-  font-size: 16px;
-  position: absolute;
-  bottom: 0;
-  padding: 10px;
-
-  elevation: 8;
-  shadow-color: #333;
-  shadow-offset: 0px 0px;
-  shadow-opacity: 0.5;
-  shadow-radius: 2px;
+const MainImageView = styled.View`
+  padding-bottom: 20px;
+`;
+const MapContainer = styled.View`
+  padding: 0px 10px 0px 10px;
 `;
 
 type RenderItemProps = {
@@ -44,7 +37,7 @@ const renderItem: React.FC<RenderItemProps> = (
         parallaxFactor={0.4}
         {...parallaxProps}
       />
-      <RenderText>{item.name}</RenderText>
+      <MainImageText>{item.name}</MainImageText>
     </RenderView>
   );
 };
@@ -56,14 +49,25 @@ type BodyProps = {
 const Body: React.FC<BodyProps> = ({stores}) => {
   return (
     <View>
-      <Text>간단한 아침 식사를 위한 샌드위치</Text>
-      <Carousel
-        sliderWidth={screenWidth}
-        sliderHeight={screenWidth}
-        itemWidth={screenWidth - 60}
-        renderItem={renderItem}
-        hasParallaxImages={true}
-        data={stores}
+      <MainImageView>
+        <MainText>간단한 아침 식사를 위한 샌드위치</MainText>
+        <Carousel
+          sliderWidth={screenWidth}
+          sliderHeight={screenWidth}
+          itemWidth={screenWidth - 60}
+          renderItem={renderItem}
+          hasParallaxImages={true}
+          data={stores}
+        />
+      </MainImageView>
+      <MainText>근처에서 즐기는 커피</MainText>
+      <MapView
+        initialRegion={{
+          latitude: 36.78825,
+          longitude: 127.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
       />
     </View>
   );

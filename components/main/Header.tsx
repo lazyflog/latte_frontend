@@ -15,11 +15,15 @@ const Button = styled.TouchableOpacity`
   padding: 5px;
 `;
 
-const Header: React.FC = () => {
+const Header: React.FC = props => {
   return (
     <Container>
       <Logo />
-      <Button hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
+      <Button
+        hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+        onPress={() => {
+          props.navigation.navigate('Search');
+        }}>
         <SearchIcon />
       </Button>
     </Container>
