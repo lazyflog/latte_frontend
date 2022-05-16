@@ -4,7 +4,7 @@ import {Text, View, Dimensions, Platform, StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 import {Store} from '../../api/Store';
 import {MainText, MainImageText} from '../../assets/styles/TextStyles';
-import MapView from 'react-native-maps';
+import MapView, {Marker, MarkerProps} from 'react-native-maps';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -46,9 +46,11 @@ type BodyProps = {
   stores: Array<Store>;
 };
 
+const check = /\(([^)]+)\)/;
+
 const Body: React.FC<BodyProps> = ({stores}) => {
   return (
-    <View>
+    <View style={{flex: 1}}>
       <MainImageView>
         <MainText>간단한 아침 식사를 위한 샌드위치</MainText>
         <Carousel
@@ -63,12 +65,26 @@ const Body: React.FC<BodyProps> = ({stores}) => {
       <MainText>근처에서 즐기는 커피</MainText>
       <MapView
         initialRegion={{
-          latitude: 36.78825,
-          longitude: 127.4324,
+          latitude: 37.501263,
+          longitude: 126.775325,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-      />
+        style={{flex: 1, marginHorizontal: 20, borderRadius: 10}}>
+        {stores.map((marker: Store, index: number) => {
+          // prettier-ignore
+          const [longitude, latitude]: any = check.exec(marker.location_geo)[1].split(' ');
+          return latitude != '0' ? (
+            <Marker
+              key={index}
+              coordinate={{
+                latitude: latitude,
+                longitude: longitude,
+              }}
+            />
+          ) : null;
+        })}
+      </MapView>
     </View>
   );
 };
