@@ -16,7 +16,13 @@ const MainImageView = styled.View`
   padding-bottom: 20px;
 `;
 const MapContainer = styled.View`
-  padding: 0px 10px 0px 10px;
+  flex: 1;
+  shadow-color: #9c9c9c;
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.8;
+  shadow-radius: 2px;
+  margin: 0px 20px;
+  elevation: 5;
 `;
 
 type RenderItemProps = {
@@ -63,28 +69,33 @@ const Body: React.FC<BodyProps> = ({stores}) => {
         />
       </MainImageView>
       <MainText>근처에서 즐기는 커피</MainText>
-      <MapView
-        initialRegion={{
-          latitude: 37.501263,
-          longitude: 126.775325,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        style={{flex: 1, marginHorizontal: 20, borderRadius: 10}}>
-        {stores.map((marker: Store, index: number) => {
-          // prettier-ignore
-          const [longitude, latitude]: any = check.exec(marker.location_geo)[1].split(' ');
-          return latitude != '0' ? (
-            <Marker
-              key={index}
-              coordinate={{
-                latitude: latitude,
-                longitude: longitude,
-              }}
-            />
-          ) : null;
-        })}
-      </MapView>
+      <MapContainer>
+        <MapView
+          initialRegion={{
+            latitude: 37.501263,
+            longitude: 126.775325,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+          style={{
+            flex: 1,
+            borderRadius: 10,
+          }}>
+          {stores.map((marker: Store, index: number) => {
+            // prettier-ignore
+            const [longitude, latitude]: any = check.exec(marker.location_geo)![1].split(' ');
+            return latitude != '0' ? (
+              <Marker
+                key={index}
+                coordinate={{
+                  latitude: latitude,
+                  longitude: longitude,
+                }}
+              />
+            ) : null;
+          })}
+        </MapView>
+      </MapContainer>
     </View>
   );
 };

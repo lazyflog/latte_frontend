@@ -37,6 +37,10 @@ const Main: React.FC<Props> = ({navigation}) => {
     AsyncStorage.setItem('LATTE_REFRESH_TOKEN', refresh);
   };
 
+  const HeaderProps = {
+    navigation,
+  };
+
   const [cafeData, setCafeData] = useState<Array<Store>>([]);
 
   const authorization = async () => {
@@ -67,7 +71,7 @@ const Main: React.FC<Props> = ({navigation}) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Header navigation={navigation} />
+      <Header {...HeaderProps} />
       <Container>
         <Body stores={cafeData} />
       </Container>
