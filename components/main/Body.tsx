@@ -1,20 +1,27 @@
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
-import React from 'react';
+import React, {useRef} from 'react';
 import {Text, View, Dimensions, Platform, StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 import {Store} from '../../api/Store';
 import {MainText, MainImageText} from '../../assets/styles/TextStyles';
-import MapView, {Marker, MarkerProps} from 'react-native-maps';
+import MapView, {Marker, MarkerProps, LatLng} from 'react-native-maps';
+import {TagMaker} from '../../utils/StoreUtil';
 
 const {width: screenWidth} = Dimensions.get('window');
+
+const Container = styled.View`
+  flex: 1;
+`;
 
 const RenderView = styled.View`
   width: ${screenWidth - 60}px;
   height: 250px;
 `;
+
 const MainImageView = styled.View`
   padding-bottom: 20px;
 `;
+
 const MapContainer = styled.View`
   flex: 1;
   shadow-color: #9c9c9c;
@@ -52,11 +59,18 @@ type BodyProps = {
   stores: Array<Store>;
 };
 
-const check = /\(([^)]+)\)/;
-
 const Body: React.FC<BodyProps> = ({stores}) => {
+  const mapRef = useRef<MapView>(null);
+
+  const GetAddress = async (location: LatLng) => {
+    if (mapRef.current == null) return;
+
+    let a = await mapRef.current.addressForCoordinate(location);
+    console.log(a);
+  };
+
   return (
-    <View style={{flex: 1}}>
+    <Container>
       <MainImageView>
         <MainText>간단한 아침 식사를 위한 샌드위치</MainText>
         <Carousel
@@ -77,26 +91,34 @@ const Body: React.FC<BodyProps> = ({stores}) => {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
+          showsUserLocation={true}
+          followsUserLocation={true}
           style={{
             flex: 1,
             borderRadius: 10,
-          }}>
+          }}
+          ref={mapRef}>
           {stores.map((marker: Store, index: number) => {
-            // prettier-ignore
-            const [longitude, latitude]: any = check.exec(marker.location_geo)![1].split(' ');
-            return latitude != '0' ? (
+            const {longitude, latitude}: LatLng = marker.location;
+            GetAddress(marker.location);
+            return (
               <Marker
                 key={index}
                 coordinate={{
                   latitude: latitude,
                   longitude: longitude,
                 }}
+                title={stores[index].name}
+                description={TagMaker(stores[index].tag)}
+                onCalloutPress={() => {
+                  console.log('callout');
+                }}
               />
-            ) : null;
+            );
           })}
         </MapView>
       </MapContainer>
-    </View>
+    </Container>
   );
 };
 

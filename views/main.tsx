@@ -50,7 +50,7 @@ const Main: React.FC<Props> = ({navigation}) => {
       password: '1q2w3e4r',
     });
     if (token) {
-      console.log('already logedin!');
+      console.log(token);
       get1Store();
     } else {
       saveToken(data);

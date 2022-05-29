@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import { LatLng } from "react-native-maps";
 import client from "./client";
 import { Pagination } from './General';
 
@@ -20,7 +21,7 @@ export interface Store {
     name: string;
     tel: string;
     operation_time: OperationTime;
-    location_geo: string;
+    location: LatLng;
     tag: Array<string>;
     results: Array<String>;
     image_url?: string;

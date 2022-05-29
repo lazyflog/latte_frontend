@@ -1,9 +1,10 @@
 import styled from 'styled-components/native';
+import { Themes } from '../../styles';
 
-export const MainText = styled.Text`
+export const MainText = styled.Text<{theme: Themes}>`
   font-size: 22px;
   font-weight: 700;
-  color: #393939;
+  color: ${({theme}) => theme.colors.text};
   padding: 15px;
 `;
 

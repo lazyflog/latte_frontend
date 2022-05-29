@@ -62,4 +62,5 @@ const LightTheme = {
   },
 };
 
-export {DarkTheme, LightTheme, Themes};
+export { DarkTheme, LightTheme };
+export type { Themes };

@@ -4,6 +4,7 @@ import Logo from '../../assets/Logo.svg';
 import SearchIcon from '../../assets/SearchIcon.svg';
 import {LightTheme} from '../../styles';
 import {StackNavigationProp} from '@react-navigation/stack';
+import useTheme from '../../hooks/ui/useTheme';
 
 const Container = styled.View`
   flex-direction: row;
@@ -24,15 +25,17 @@ const Button = styled.TouchableOpacity`
   padding: 5px;
 `;
 const Header: React.FC<Props> = props => {
+  const theme = useTheme();
+
   return (
     <Container>
-      <Logo />
+      <Logo fill={theme.colors.text} />
       <Button
         hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
         onPress={() => {
           props.navigation.navigate('Search');
         }}>
-        <SearchIcon />
+        <SearchIcon fill={theme.colors.text} />
       </Button>
     </Container>
   );
